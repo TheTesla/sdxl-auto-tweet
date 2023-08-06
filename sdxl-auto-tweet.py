@@ -41,12 +41,31 @@ client = tweepy.Client(
 prompt = "A high detail photograph of a group of men from China wearing inflatable shorts."
 tags = "#inflatableshorts #inflatablefetish #sdxl #stablediffusionxl #ai #aiart #inflatable #inflatables #shorts"
 
+#h = 512
+#w = 512
 h = 1024
 w = 1024
 
-for i in range(100000000):
+for i in range(1,100000000):
     _, filename = make_image(prompt, i, h=h, w=w)
     text = f'#prompt: "{prompt}"\n\nheight: {h}\nwidth: {w}\nseed: {i}\n\n{tags}'
+
+
+    tweepy_auth = tweepy.OAuth1UserHandler(
+        secret.twitter_auth_keys['consumer_key'],
+        secret.twitter_auth_keys['consumer_secret'],
+        secret.twitter_auth_keys['access_token'],
+        secret.twitter_auth_keys['access_token_secret']
+    )
+    
+    tweepy_api = tweepy.API(tweepy_auth)
+    
+    client = tweepy.Client(
+        consumer_key=secret.twitter_auth_keys['consumer_key'], #API Key
+        consumer_secret=secret.twitter_auth_keys['consumer_secret'], #API Secret
+        access_token=secret.twitter_auth_keys['access_token'],
+        access_token_secret=secret.twitter_auth_keys['access_token_secret']
+    )
 
     post = tweepy_api.simple_upload(filename)
     response = client.create_tweet(text=text, media_ids=[post.media_id])
