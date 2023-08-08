@@ -83,14 +83,14 @@ prompts = [ [
             "A young man from India is wearing an inflatable suit.",
             "A young man in India is wearing an inflatable suit."
 ]
-
+]
 
 #h = 512
 #w = 512
 h = 1024
 w = 1024
 
-for i in range(47,100000000):
+for i in range(100,100000000):
     accNr = i%4
     sel = int(i/4) % 8
     seed = int(i/32)
