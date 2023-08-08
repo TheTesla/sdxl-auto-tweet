@@ -90,13 +90,14 @@ prompts = [ [
 h = 1024
 w = 1024
 
-for i in range(100,100000000):
+for i in range(102,100000):
     accNr = i%4
     sel = int(i/4) % 8
     seed = int(i/32)
     prompt = prompts[accNr][sel]
-    _, filename = make_image(prompt, seed, h=h, w=w)
     text = f'#prompt: "{prompt}"\n\nheight: {h}\nwidth: {w}\nseed: {i}\n\n{tags}'
+    print(text)
+    _, filename = make_image(prompt, seed, h=h, w=w)
 
     post(text, filename, twitter_auth_keys[accNr])
 
