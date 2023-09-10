@@ -2,6 +2,7 @@
 
 from diffusers import DiffusionPipeline
 import torch
+import time
 
 import tweepy
 from secret import twitter_auth_keys
@@ -90,7 +91,17 @@ prompts = [ [
 h = 1024
 w = 1024
 
-for i in range(105,100000):
+try:
+    with open("statefile", "r") as f:
+        state_str = f.read()
+    i_start = int(state_str.split("=")[1])
+except Exception as e:
+    print(e)
+    i_start = 0
+
+for i in range(i_start,100000):
+    with open("statefile", "w") as f:
+        f.write(f"i={i}")
     accNr = i%4
     sel = int(i/4) % 8
     seed = int(i/32)
@@ -100,6 +111,13 @@ for i in range(105,100000):
     print(text)
     _, filename = make_image(prompt, seed, h=h, w=w)
 
-    post(text, filename, twitter_auth_keys[accNr])
+    while True:
+        try:
+            post(text, filename, twitter_auth_keys[accNr])
+        except Exception as e:
+            print(e)
+            time.sleep(10)
+            continue
+        break 
 
 
